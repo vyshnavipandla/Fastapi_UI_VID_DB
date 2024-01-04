@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Videos</title>
+
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+
+</head>
+
+<body>
+    <nav class="navbar bg-body-tertiary">
+        <div class="container-fluid">
+            <a class="navbar-brand" href="/upload-video">
+                <h4>My Talking Tree</h4>
+            </a>
+        </div>
+    </nav>
+
+    {% if message %}
+    <div class="alert alert-success">{{ message }}</div>
+    {% endif %}
+    {% if error %}
+    <div class="alert alert-danger">{{ error }}</div>
+    {% endif %}
+
+    <form action="/upload" method="post" enctype="multipart/form-data">
+        <div class="container-fluid">
+            <div class="mb-5">
+                <label for="formFileLg" class="form-label" style="display: block; text-align: center;"><h4><b><br>Choose your video</b></h4></label>
+                <input class="form-control form-control-lg" id="formFileLg" type="file" name="video" accept=".mp4" required>
+            </div>
+
+            <div class="mb-3">
+                <label for="exampleInputEmail1" class="form-label"><br><h6>"Name Of The Uploaded Video"</h6></label>
+                <input type="text" class="form-control" id="exampleInputEmail1" name="videoname" aria-describedby="emailHelp" required>
+            </div>
+            <div style="text-align: center;" class="d-grid gap-2 col-6 mx-auto">
+                <button type="submit" class="btn btn-outline-success btn-lg"><i class="bi bi-database-up"></i>Submit</button>
+            </div>
+        </div>
+    </form>
+
+    {% if videos %}
+    <div class="container mt-5">
+        <h3>Uploaded Videos</h3>
+        <table class="table">
+            <thead>
+                <tr>
+                    <th scope="col">S.No.</th>
+                    <th scope="col">Video Name</th>
+                    <th scope="col">Actions</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for video in videos %}
+                <tr>
+                    <th scope="row" class="serial-number">{{ loop.index }}</th>
+                    <td>{{ video.videoname }}</td>
+                    <td>
+                        <form action="/delete/{{ video.id }}" method="post">
+                            <button type="submit" class="btn btn-danger">Delete</button>
+                        </form>
+                    </td>
+                </tr>
+                {% endfor %}
+            </tbody>
+        </table>
+    </div>
+    {% endif %}
+    <div id="videos-container"></div>
+
+    <script>
+        // Update the serial numbers dynamically
+        const serialNumbers = document.querySelectorAll('.serial-number');
+        serialNumbers.forEach((number, index) => {
+            number.textContent = index + 1;
+        });
+    </script>
+
+</body>
+
+</html>
